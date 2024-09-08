@@ -1,7 +1,4 @@
-import {
-  json,
-  type LoaderFunctionArgs,
-} from "@vercel/remix";
+import { json, type LoaderFunctionArgs } from "@vercel/remix";
 import { useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import { format } from "date-fns";

@@ -23,14 +23,6 @@
     - no API routes
     - no calling external APIs from the UI / keep api keys hidden in the backend
 
-## Still To-Do
-
-- Get [prettier](https://prettier.io) to format on save
-    - currently throwing an exception, but formatting this works from CLI:
-```bash
-    npx prettier . --write
-```
-
 ## APIs Used
 
 - [One Call API 3.0](https://openweathermap.org/api/one-call-3) by [OpenWeather](https://openweathermap.org/api/one-call-3)
