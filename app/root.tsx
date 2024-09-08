@@ -1,13 +1,35 @@
 import {
   Links,
   Meta,
+  NavLink,
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
 import "./tailwind.css";
 
+import { json, type LoaderFunctionArgs } from '@vercel/remix';
+
+import type { City } from "./cities";
+import { getCity } from "./data";
+
+const initialCityIDs = [ 3451190, 1816670, 5368361 ];
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const cities: City[] = [];
+
+  for (let i = 0; i < initialCityIDs.length; i++) {
+    const city = await getCity(initialCityIDs[i]);
+    if (city) cities.push(city);
+  }
+  
+  return json({ cities });
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { cities } = useLoaderData<typeof loader>();
+
   return (
     <html lang="en">
       <head>
@@ -25,6 +47,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </div>
         <div className="flex-grow lg:w-[720px] my-2 mx-auto overflow-y-auto">
           <div className="grid grid-cols-3 gap-2">
+            {cities.map((city) => (
+              <NavLink key={city.city_id} to={`/city/${city.city_id}`}></NavLink>
+            ))}
             <div className="p-2 text-center">Rio</div>
             <div className="p-2 text-center">Beijing</div>
             <div className="p-2 text-center">Los Angeles</div>
