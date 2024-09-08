@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   Links,
   Meta,
@@ -7,8 +8,9 @@ import {
   ScrollRestoration,
   useLoaderData,
   Form,
-  useSubmit,
+  useNavigation,
 } from "@remix-run/react";
+import { useDebounceSubmit } from "remix-utils/use-debounce-submit";
 import "./tailwind.css";
 
 import { json, type LoaderFunctionArgs } from "@vercel/remix";
@@ -34,7 +36,19 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { cities, q } = useLoaderData<typeof loader>();
-  const submit = useSubmit();
+  const submit = useDebounceSubmit();
+  const navigation = useNavigation();
+
+  const searching =
+    navigation.location &&
+    new URLSearchParams(navigation.location.search).has("q");
+
+  useEffect(() => {
+    const searchField = document.getElementById("q");
+    if (searchField instanceof HTMLInputElement) {
+      searchField.value = q || "";
+    }
+  }, [q]);
 
   return (
     <html lang="en">
@@ -44,7 +58,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="min-h-[100svh] flex flex-col bg-gradient-to-b from-blue-700 to-slate-100">
+      <body className="min-h-[100svh] flex flex-col bg-gradient-to-b from-slate-100 to-blue-500">
         <div className="flex-grow-0 h-16 flex items-center justify-between bg-slate-200 sticky top-0 py-1 z-50">
           <h1 className="px-4 xl:px-6 text-2xl">Weather App</h1>
           <div className="px-4 xl:px-6">
@@ -53,9 +67,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
               role="search"
               onChange={(event) => {
                 const isFirstSearch = q === null;
-                submit(event.currentTarget, { replace: !isFirstSearch });
+                submit(event.currentTarget, {
+                  replace: !isFirstSearch,
+                  debounceTimeout: 500,
+                });
               }}
+              className="flex flex-row items-center gap-2"
             >
+              <div id="search-spinner" aria-hidden hidden={!searching} />
               <input
                 type="search"
                 placeholder="Search cities..."
@@ -71,7 +90,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <div className="flex-grow relative">
           <div className="grid grid-cols-3 gap-x-2 lg:w-[720px] mx-auto sticky top-16 bg-slate-100">
             {cities.map((city) => (
-              <NavLink key={city.city_id} to={`/city/${city.city_id}`}>
+              <NavLink
+                key={city.city_id}
+                to={`/city/${city.city_id}`}
+                className={({ isActive, isPending }) =>
+                  isActive ? "bg-slate-400/50" : isPending ? "opacity-50" : ""
+                }
+              >
                 <div className="p-3 text-center">{city.city_name}</div>
               </NavLink>
             ))}

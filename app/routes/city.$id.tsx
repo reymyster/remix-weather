@@ -59,7 +59,9 @@ export default function City() {
 
   return (
     <div className="flex flex-col gap-3 mt-8">
-      <h2 className="py-4 text-3xl">{city.city_name}</h2>
+      <h2 className="py-4 text-3xl">
+        {city.city_name}, {city.state_code}, {city.country_code}
+      </h2>
       <div className="bg-slate-200 p-2 shadow-lg">
         <div className="text-xl p-2 border-b border-b-slate-400/50 mb-2">
           Next hours
@@ -91,7 +93,7 @@ export default function City() {
             ))}
         </div>
       </div>
-      <div className="bg-slate-200 p-2">
+      <div className="bg-slate-200 p-2 shadow-lg">
         <div className="text-xl p-2 border-b border-b-slate-400/50 mb-2">
           Next days
         </div>
@@ -100,7 +102,10 @@ export default function City() {
           .map((day, idx) => (
             <div
               key={idx}
-              className={cn("flex flex-row flex-nowrap justify-between items-center", idx > 0 && "border-t border-t-slate-400/20")}
+              className={cn(
+                "flex flex-row flex-nowrap justify-between items-center",
+                idx > 0 && "border-t border-t-slate-400/20",
+              )}
             >
               <div className="flex-grow-0">
                 <img
@@ -110,10 +115,15 @@ export default function City() {
                 />
               </div>
               <div className="flex flex-col items-center flex-grow">
-                <div className="font-bold">{format(new Date(day.dt * 1000), "ccc, MMM d")}</div>
+                <div className="font-bold">
+                  {format(new Date(day.dt * 1000), "ccc, MMM d")}
+                </div>
                 <div className="text-xs text-black/50">{day.summary}</div>
               </div>
-                <div className="flex-grow-0">{Math.round(day.temp.min)}&deg;&nbsp;{Math.round(day.temp.max)}&deg;</div>
+              <div className="flex-grow-0">
+                {Math.round(day.temp.min)}&deg;&nbsp;{Math.round(day.temp.max)}
+                &deg;
+              </div>
             </div>
           ))}
       </div>
