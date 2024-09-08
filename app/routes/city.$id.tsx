@@ -26,5 +26,10 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 export default function City() {
   const { city } = useLoaderData<typeof loader>();
 
-  return <div>{city.city_name}</div>;
+  return (
+    <div>
+      <hr />
+      <h2 className="py-4 text-2xl">{city.city_name}</h2>
+    </div>
+  );
 }
