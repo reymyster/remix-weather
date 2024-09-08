@@ -20,13 +20,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const q = url.searchParams.get("q");
   if (q) {
     const cities = await getCities(q);
-    return json({ q, cities });
+    return json({ cities });
   }
   return redirect("/city/3451190", 302); // for now hard code redirect to rio
 };
 
 export default function Index() {
-  const { cities, q } = useLoaderData<typeof loader>();
+  const { cities } = useLoaderData<typeof loader>();
 
   if (!cities || cities.length === 0) {
     return <div className="text-center">No cities found.</div>;
