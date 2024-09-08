@@ -9,12 +9,12 @@ import {
 } from "@remix-run/react";
 import "./tailwind.css";
 
-import { json, type LoaderFunctionArgs } from '@vercel/remix';
+import { json, type LoaderFunctionArgs } from "@vercel/remix";
 
 import type { City } from "./cities";
 import { getCity } from "./data";
 
-const initialCityIDs = [ 3451190, 1816670, 5368361 ];
+const initialCityIDs = [3451190, 1816670, 5368361];
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const cities: City[] = [];
@@ -23,9 +23,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     const city = await getCity(initialCityIDs[i]);
     if (city) cities.push(city);
   }
-  
+
   return json({ cities });
-}
+};
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { cities } = useLoaderData<typeof loader>();
@@ -42,17 +42,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <div className="flex-grow-0 h-16 flex items-center justify-between bg-slate-300/50 shadow-lg">
           <h1 className="px-4 xl:px-6 text-2xl">Weather App</h1>
           <div className="px-4 xl:px-6">
-            <input type="search" placeholder="Search cities..." className="p-2 rounded-md" />
+            <input
+              type="search"
+              placeholder="Search cities..."
+              className="p-2 rounded-md"
+            />
           </div>
         </div>
         <div className="flex-grow lg:w-[720px] my-2 mx-auto overflow-y-auto">
           <div className="grid grid-cols-3 gap-2">
             {cities.map((city) => (
-              <NavLink key={city.city_id} to={`/city/${city.city_id}`}></NavLink>
+              <NavLink key={city.city_id} to={`/city/${city.city_id}`}>
+                <div className="p-2 text-center">{city.city_name}</div>
+              </NavLink>
             ))}
-            <div className="p-2 text-center">Rio</div>
-            <div className="p-2 text-center">Beijing</div>
-            <div className="p-2 text-center">Los Angeles</div>
           </div>
           {children}
         </div>
