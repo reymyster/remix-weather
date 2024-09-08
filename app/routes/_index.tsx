@@ -14,7 +14,7 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export let loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
   const q = url.searchParams.get("q");
   if (q) {

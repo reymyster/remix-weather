@@ -44,8 +44,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="h-[100svh] flex flex-col bg-slate-100">
-        <div className="flex-grow-0 h-16 flex items-center justify-between bg-slate-300/50 shadow-lg">
+      <body className="min-h-[100svh] flex flex-col bg-gradient-to-b from-blue-700 to-slate-100">
+        <div className="flex-grow-0 h-16 flex items-center justify-between bg-slate-200 sticky top-0 py-1 z-50">
           <h1 className="px-4 xl:px-6 text-2xl">Weather App</h1>
           <div className="px-4 xl:px-6">
             <Form
@@ -68,15 +68,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </Form>
           </div>
         </div>
-        <div className="flex-grow lg:w-[720px] my-2 mx-auto overflow-y-auto">
-          <div className="grid grid-cols-3 gap-2">
+        <div className="flex-grow relative">
+          <div className="grid grid-cols-3 gap-x-2 lg:w-[720px] mx-auto sticky top-16 bg-slate-100">
             {cities.map((city) => (
               <NavLink key={city.city_id} to={`/city/${city.city_id}`}>
-                <div className="p-2 text-center">{city.city_name}</div>
+                <div className="p-3 text-center">{city.city_name}</div>
               </NavLink>
             ))}
+            <hr className="col-span-3" />
           </div>
-          {children}
+          <div className="lg:w-[720px] my-2 mx-auto">{children}</div>
         </div>
         <ScrollRestoration />
         <Scripts />
